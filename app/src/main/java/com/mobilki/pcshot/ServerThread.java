@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
@@ -13,10 +12,7 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.os.Build;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -27,9 +23,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-public class ServerThread implements Runnable {
+class ServerThread implements Runnable {
     private BluetoothServerSocket bluetoothServerSocket;
-    private BluetoothSocket socket;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
 
@@ -69,11 +64,11 @@ public class ServerThread implements Runnable {
         while (true) {
             try {
                 //listening connections
-                socket = bluetoothServerSocket.accept();
-                //get input&output streams
-                outputStream = new DataOutputStream(socket.getOutputStream());
-                inputStream = new DataInputStream(socket.getInputStream());
+                BluetoothSocket socket = bluetoothServerSocket.accept();
                 if (socket != null) {
+                    //get input&output streams
+                    outputStream = new DataOutputStream(socket.getOutputStream());
+                    inputStream = new DataInputStream(socket.getInputStream());
                     sendScreenshot();
                 }
             } catch (IOException e) {

@@ -70,7 +70,7 @@ class ImageAdapter extends BaseAdapter {
             } });
     }
 
-    public File[] getImages() {
+    File[] getImages() {
         return images;
     }
 }
